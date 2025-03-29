@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BlazingPizza
+namespace BlazingPizza.Model
 {
     public class OrderWithStatus
     {
@@ -14,7 +14,7 @@ namespace BlazingPizza
 
         public bool IsDelivered => StatusText == "Delivered";
 
-        public static OrderWithStatus FromOrder(Order order)
+        /*public static OrderWithStatus FromOrder(Order order)
         {
             // To simulate a real backend process, we fake status updates based on the amount
             // of time since the order was placed
@@ -39,8 +39,28 @@ namespace BlazingPizza
                 Order = order,
                 StatusText = statusText
             };
-        }
+        }*/
 
+        public static OrderWithStatus FromOrder(Order order)
+        {
+            // To simulate a real backend process, we fake status updates based on the amount
+            // of time since the order was placed
+            var dispatchTime =
+                order.CreatedTime.Add(PreparationDuration);
+
+            var now = DateTime.Now;
+            var statusText =
+                now < dispatchTime
+                    ? "Preparing" :
+                    now < dispatchTime + DeliveryDuration
+                        ? "Out for delivery" : "Delivered";
+
+            return new()
+            {
+                Order = order,
+                StatusText = statusText
+            };
+        }
 
     }
 }

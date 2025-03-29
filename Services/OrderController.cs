@@ -1,8 +1,9 @@
 using BlazingPizza.Data;
+using BlazingPizza.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlazingPizza;
+namespace BlazingPizza.Services;
 
 [Route("orders")]
 [ApiController]
@@ -15,7 +16,7 @@ public class OrdersController : Controller
         _db = db;
     }
 
-    [HttpGet]
+    /*[HttpGet]
     public async Task<ActionResult<List<OrderWithStatus>>> GetOrders()
     {
         var orders = await _db.Orders
@@ -25,7 +26,7 @@ public class OrdersController : Controller
         .ToListAsync();
 
         return orders.Select(o => OrderWithStatus.FromOrder(o)).ToList();
-    }
+    }*/
 
     [HttpPost]
     public async Task<ActionResult<int>> PlaceOrder(Order order)

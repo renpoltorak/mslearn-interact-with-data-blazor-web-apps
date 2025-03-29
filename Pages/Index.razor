@@ -3,7 +3,10 @@
 @inject NavigationManager NavigationManager
 
 @using BlazingPizza.Services
+@using BlazingPizza.Model
 @inject OrderState OrderState
+
+@inject IJSRuntime JavaScript
 
 <!--<div class="top-bar">
     <a class="logo" href="">
@@ -61,7 +64,12 @@
           <div class="item-price">
             @configuredPizza.GetFormattedTotalPrice()
           </div>
-          <a @onclick="@(() => OrderState.RemoveConfiguredPizza(configuredPizza))" class="delete-item">x</a>
+
+          <button type="button" class="close text-danger" aria-label="Close"
+            @onclick="@(async () => await RemovePizzaConfirmation(configuredPizza))">
+            <span aria-hidden="true">&times;</span>
+          </button>
+
         </div>
       }
     </div>
@@ -88,5 +96,36 @@
   protected override async Task OnInitializedAsync()
   {
     specials = await HttpClient.GetFromJsonAsync<List<PizzaSpecial>>(NavigationManager.BaseUri + "specials");
+  }
+
+  /*async Task RemovePizzaConfirmation(Pizza removePizza)
+  {
+    if (await JavaScript.InvokeAsync<bool>(
+    "confirm",
+    $"""Do you want to remove the "{removePizza.Special!.Name}" from your order?"""))
+    {
+      OrderState.RemoveConfiguredPizza(removePizza);
+    }
+  }*/
+
+  async Task RemovePizzaConfirmation(Pizza removePizza)
+  {
+    var messageParams = new
+    {
+      title = "Remove Pizza?",
+      text = $"""Do you want to remove the "{removePizza.Special!.Name}" from your order?""",
+      icon = "warning",
+      buttons = new
+      {
+        abort = new { text = "No, leave it in my order", value = false },
+        confirm = new { text = "Yes, remove pizza", value = true }
+      },
+      dangerMode = true
+    };
+
+    if (await JavaScript.InvokeAsync<bool>("swal", messageParams))
+    {
+      OrderState.RemoveConfiguredPizza(removePizza);
+    }
   }
 }

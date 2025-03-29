@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using BlazingPizza.Model;
 
 namespace BlazingPizza.Data;
 

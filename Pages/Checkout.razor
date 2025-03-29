@@ -1,10 +1,9 @@
 @page "/checkout"
-@using BlazingPizza.Services
-@using BlazingPizza.Shared
 @inject OrderState OrderState
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
-
+@using BlazingPizza.Model
+@using BlazingPizza.Services
 @implements IDisposable
 
 <div class="main">
@@ -37,7 +36,7 @@
 
     private EditContext editContext;
 
-    bool isSubmitting;
+    //bool isSubmitting;
     bool isError = false;
 
     protected override void OnInitialized()

@@ -1,3 +1,5 @@
+using BlazingPizza.Model;
+
 namespace BlazingPizza.Data;
 
 public static class SeedData
@@ -62,7 +64,7 @@ public static class SeedData
                 ImageUrl = "img/pizzas/margherita.jpg",
             },
         };
-        db.Specials.AddRange(specials);
+        db.Specials.AddRange(specials.ToList());
         db.SaveChanges();
     }
 }
